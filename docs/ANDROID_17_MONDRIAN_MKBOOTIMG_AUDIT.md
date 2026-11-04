@@ -22,8 +22,8 @@ A standalone AnyKernel zip success is not evidence that the kernel/DTBO/modules 
 
 1. [x] Historical legacy `--dt` header patch and affected hash/data layout identified.
 2. [x] Official AOSP17 source tree/version, Soong, boot header and vendor ramdisk architecture identified.
-3. [ ] Historical source inventory CI check for legacy DT behavior passed.
-4. [ ] **Execute actual official AOSP17 r1 tools** against synthetic boot v4 and vendor_boot v4 (including vendor ramdisk fragment + DTB), unpack and byte-compare kernel, ramdisk, fragment, DTB, bootconfig. This is not bootloader validation.
+3. [x] Historical PE old DT/header source [CI PASS #41799193000](https://github.com/PixelExperience-Reborn/system_tools_mkbootimg/actions/runs/41799193000).
+4. [x] **Executed actual official AOSP17 r1 tools** against synthetic boot v4 and vendor_boot v4 with vendor ramdisk fragment + DTB; unpacked and byte-compared kernel, ramdisk, fragment, DTB and bootconfig; checked invalid header version rejection. [Functional host CI PASS #41799193126](https://github.com/PixelExperience-Reborn/system_tools_mkbootimg/actions/runs/41799193126). This is a synthetic format test, not bootloader, Soong or AVB validation.
 5. [ ] Verify official `mkbootimg_test`, Python source API and actual Soong host build as part of full Android17 workspace.
 6. [ ] Author independent PE-Reborn mondrian/sm8450-common device trees; verify actual stock image header, DTBO IDs, vendor boot ramdisk, partition sizes, AVB and rollback.
 7. [ ] Build complete Android17 boot/recovery/OTA, test live boot/unlock/FBE and CTS/VTS/device compatibility. **No physical mondrian testing has occurred.**
