@@ -1,0 +1,31 @@
+name: PE mkbootimg old Qualcomm DT header source audit
+
+on:
+  push:
+    branches:
+      - audit/a17-mondrian-mkbootimg-20261104
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  archived-boot-header:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            docs
+            tools
+            Android.bp
+            mkbootimg.py
+            unpack_bootimg.py
+            include/bootimg/bootimg.h
+          sparse-checkout-cone-mode: false
+      - name: Verify exact historical PE legacy DT boot header semantics
+        run: python3 tools/verify_a17_mkbootimg_legacy.py
