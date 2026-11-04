@@ -1,0 +1,40 @@
+name: AOSP17 tagged mkbootimg real v4 format round-trip
+
+on:
+  push:
+    branches:
+      - audit/a17-mondrian-mkbootimg-20261104
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tagged-v4-synthetic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          filter: blob:none
+          sparse-checkout: |
+            .github
+            docs
+            tools
+          sparse-checkout-cone-mode: false
+      - name: Checkout exact AOSP17 r1 mkbootimg tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --single-branch \
+            --branch android-17.0.0_r1 \
+            https://android.googlesource.com/platform/system/tools/mkbootimg \
+            "$RUNNER_TEMP/aosp17-mkbootimg"
+          test "$(git -C "$RUNNER_TEMP/aosp17-mkbootimg" rev-parse HEAD^{tree})" = \
+            "79c702136b6587fe4d2097a462c64db9fbd49204"
+      - name: Execute real mkbootimg/unpack_bootimg on synthetic v4 files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/verify_official_mkbootimg_v4.py "$RUNNER_TEMP/aosp17-mkbootimg"
